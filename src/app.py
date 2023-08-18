@@ -49,10 +49,11 @@ def handle_hello():
 @app.route('/people', methods=['GET'])
 def people_get():
 
-    result = People.query.all()
-
-    if result:
-        return jsonify(result), 200
+    people_objects = People.query.all()
+    serialized_people = [person.serialize() for person in people_objects]
+    
+    if serialized_people:
+        return jsonify(serialized_people), 200
     else:
         return "Error", 400
      
