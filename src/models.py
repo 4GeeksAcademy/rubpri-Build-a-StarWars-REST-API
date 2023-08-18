@@ -17,3 +17,17 @@ class User(db.Model):
             "email": self.email,
             # do not serialize the password, its a security breach
         }
+    
+class People(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+
+    # Tell python how to print the class object on the console
+    def __repr__(self):
+        return '<People %r>' % self.username
+
+    # Tell python how convert the class object into a dictionary ready to jsonify
+    def serialize(self):
+        return {"username": self.username,
+                "email": self.email}
