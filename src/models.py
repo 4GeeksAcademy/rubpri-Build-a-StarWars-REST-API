@@ -29,5 +29,44 @@ class People(db.Model):
 
     # Tell python how convert the class object into a dictionary ready to jsonify
     def serialize(self):
-        return {"username": self.username,
-                "email": self.email}
+        return {
+            "id": self.id,
+            "username": self.username,
+            "email": self.email
+        }
+    
+
+class Planets(db.Model):
+    __tablename__ = 'planets'
+    id = db.Column(db.Integer, primary_key=True)
+    diameter = db.Column(db.Integer)
+    rotation_period = db.Column(db.Integer)
+    orbital_period = db.Column(db.Integer)
+    gravity = db.Column(db.String(20))
+    population = db.Column(db.Integer)
+    climate = db.Column(db.String(20))
+    terrain = db.Column(db.String(20))
+    surface_water = db.Column(db.Integer)
+    created = db.Column(db.String(20))
+    edited = db.Column(db.String(20))
+    name = db.Column(db.String(20))
+    url = db.Column(db.String(20))
+
+    def __repr__(self):
+        return '<Planets %r>' % self.name
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "diameter": self.diameter,
+            "rotation_period": self.rotation_period,
+            "orbital_period": self.orbital_period,
+            "gravity": self.gravity,
+            "population": self.population,
+            "climate": self.climate,
+            "terrain": self.terrain,
+            "surface_water": self.surface_water,
+            "created": self.created,
+            "edited": self.edited,
+            "name": self.name,
+        }
