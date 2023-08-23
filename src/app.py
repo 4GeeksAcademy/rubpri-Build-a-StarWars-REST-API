@@ -36,16 +36,6 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
-@app.route('/user', methods=['GET'])
-def handle_hello():
-
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
-
-    return jsonify(response_body), 200
-
-
 @app.route('/people', methods=['GET'])
 def people_get():
 
@@ -54,8 +44,7 @@ def people_get():
     
     if serialized_people:
         return jsonify(serialized_people), 200
-    else:
-        return "Error", 400
+    return "Error", 400
      
 
 @app.route('/people/<int:person_id>', methods=['GET'])
@@ -76,8 +65,7 @@ def planets_get():
     
     if serialized_planets:
         return jsonify(serialized_planets), 200
-    else:
-        return "Error", 400
+    return "Error", 404
 
 
 @app.route('/planets/<int:planet_id>', methods=['GET'])
@@ -89,13 +77,15 @@ def get_single_planet(planet_id):
         return jsonify(planet.serialize()), 200
     return "Invalid Method", 404
 
+@app.route('/users', methods=['GET'])
+def users_get():
 
+    all_users = User.query.all()
+    serialized_users = [user.serialize() for user in all_users]
 
-
-
-
-
-
+    if serialized_users:
+        return jsonify(serialized_users), 200
+    return "Error", 404
 
 
 # this only runs if `$ python src/app.py` is executed
