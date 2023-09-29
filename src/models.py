@@ -9,7 +9,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %r>' % self.email
 
     def serialize(self):
         return {
@@ -70,3 +70,22 @@ class Planets(db.Model):
             "edited": self.edited,
             "name": self.name,
         }
+    
+class Favorites(db.Model):
+    __tablename__ = 'favorites'
+    id = db.Column(db.Integer, primary_key=True)
+    planets_id = db.Column(db.Integer, db.ForeignKey('planets.id'))
+    planets = db.relationship('Planets', primaryjoin='Planets.id == Favorites.planets_id')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', primaryjoin='User.id == Favorites.user_id')
+    
+    def __repr__(self):
+        return '<Favorites %r>' % self.id
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "planets_id": self.planets_id,
+            "user_id": self.user_id
+        }
+    

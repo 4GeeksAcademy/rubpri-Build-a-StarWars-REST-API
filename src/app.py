@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User, People, Planets
+from models import db, User, People, Planets, Favorites
 #from models import Person
 
 app = Flask(__name__)
@@ -86,6 +86,21 @@ def users_get():
     if serialized_users:
         return jsonify(serialized_users), 200
     return "Error", 404
+
+@app.route('/users/favorites/<int:id>', methods=['GET'])
+def users_favorites(id):
+    
+    favorites = db.session.execute(db.select(Favorites).where(Favorites.user_id == id)).scalars()
+
+    results = [item.serialize() for item in favorites]
+    
+    if results:
+        return jsonify(results), 200
+
+    else:
+        return "Error", 404
+
+
 
 
 # this only runs if `$ python src/app.py` is executed
