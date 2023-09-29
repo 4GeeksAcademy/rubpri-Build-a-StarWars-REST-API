@@ -103,6 +103,46 @@ def users_favorites(id):
 
 
 
+# [POST] /favorite/planet/<int:planet_id> Añade un nuevo planet favorito al usuario actual con el planet id = planet_id
+
+
+@app.route('/<int:user_id>/favorite/planet/<int:planet_id>', methods=['POST'])
+def favorite_planet_post(user_id, planet_id):
+
+    user = User.query.get_or_404(user_id)
+    user_add = user.id
+    
+
+    planet = Planets.query.get_or_404(planet_id)
+    planet_add = planet.id
+    
+
+    new_favorite = Favorites(
+    planets_id=planet_add,
+    user_id=user_add
+    )
+
+    db.session.add(new_favorite)
+    db.session.commit()
+
+    response_body = {
+        "message": "New favorite added",
+        "status": "ok",
+        "new_favorite": new_favorite.serialize()
+    }
+        
+    return response_body, 200
+
+
+
+
+
+
+
+
+
+
+
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
