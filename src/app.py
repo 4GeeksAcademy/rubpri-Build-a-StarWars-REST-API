@@ -184,8 +184,37 @@ def delete_favorite_planet(user_id, planet_id):
 
         return response_body, 404
 
+#[DELETE] /favorite/people/<int:people_id> Elimina una people favorita con el id = people_id
 
+@app.route('/<int:user_id>/favorite/people/<int:people_id>', methods=['DELETE'])
+def delete_favorite_people(user_id, people_id):
+    
+    user = User.query.get_or_404(user_id)
+    user_for_delete = user.id
+    
+    people = People.query.get_or_404(people_id)
+    people_for_delete = people.id
 
+    favorite_delete = Favorites.query.filter_by(user_id=user_for_delete, people_id=people_for_delete).first()
+
+    if favorite_delete:
+        db.session.delete(favorite_delete)
+        db.session.commit()
+
+        response_body = {
+            "message": "People deleted",
+            "status": "ok"
+        }
+
+        return response_body, 200
+
+    else:
+        response_body = {
+            "message": "People not found",
+            "status": "error"
+        }
+
+        return response_body, 404
 
 
 # this only runs if `$ python src/app.py` is executed
