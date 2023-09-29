@@ -100,12 +100,6 @@ def users_favorites(id):
     else:
         return "Error", 404
 
-
-
-
-# [POST] /favorite/planet/<int:planet_id> Añade un nuevo planet favorito al usuario actual con el planet id = planet_id
-
-
 @app.route('/<int:user_id>/favorite/planet/<int:planet_id>', methods=['POST'])
 def favorite_planet_post(user_id, planet_id):
 
@@ -133,8 +127,32 @@ def favorite_planet_post(user_id, planet_id):
         
     return response_body, 200
 
+@app.route('/<int:user_id>/favorite/people/<int:people_id>', methods=['POST'])
+def favorite_people_post(user_id, people_id):
 
+    user = User.query.get_or_404(user_id)
+    user_add = user.id
+    
 
+    people = People.query.get_or_404(people_id)
+    people_add = people.id
+    
+
+    new_favorite = Favorites(
+    people_id=people_add,
+    user_id=user_add
+    )
+
+    db.session.add(new_favorite)
+    db.session.commit()
+
+    response_body = {
+        "message": "New People added",
+        "status": "ok",
+        "new_people": new_favorite.serialize()
+    }
+        
+    return response_body, 200
 
 
 
