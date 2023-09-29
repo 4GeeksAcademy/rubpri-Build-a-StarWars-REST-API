@@ -154,8 +154,35 @@ def favorite_people_post(user_id, people_id):
         
     return response_body, 200
 
+@app.route('/<int:user_id>/favorite/planet/<int:planet_id>', methods=['DELETE'])
+def delete_favorite_planet(user_id, planet_id):
+    
+    user = User.query.get_or_404(user_id)
+    user_for_delete = user.id
+    
+    planet = Planets.query.get_or_404(planet_id)
+    planet_for_delete = planet.id
 
+    favorite_delete = Favorites.query.filter_by(user_id=user_for_delete, planets_id=planet_for_delete).first()
 
+    if favorite_delete:
+        db.session.delete(favorite_delete)
+        db.session.commit()
+
+        response_body = {
+            "message": "Planet deleted",
+            "status": "ok"
+        }
+
+        return response_body, 200
+
+    else:
+        response_body = {
+            "message": "Planet not found",
+            "status": "error"
+        }
+
+        return response_body, 404
 
 
 
